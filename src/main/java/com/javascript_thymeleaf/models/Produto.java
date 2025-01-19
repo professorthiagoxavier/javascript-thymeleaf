@@ -3,12 +3,14 @@ package com.javascript_thymeleaf.models;
 public class Produto {
     private String nome;
     private String descricao;
+    private double preco;
 
     // Construtores, getters e setters
 
-    public Produto(String nome, String descricao) {
+    public Produto(String nome, String descricao, double preco) {
         this.nome = nome;
         this.descricao = descricao;
+        this.preco = preco;
     }
 
     public String getNome() {
@@ -26,4 +28,13 @@ public class Produto {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
 }
+

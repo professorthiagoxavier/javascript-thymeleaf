@@ -4,18 +4,38 @@
     <title>Manipulação de Eventos</title>
 </head>
 <body>
+	<h2>Exemplo Manipulaçao javacript</h2>
     <div>
         <h2 id="produtoNome" th:text="${produto.nome}">Nome do Produto</h2>
         <p id="produtoDescricao" th:text="${produto.descricao}">Descrição do Produto</p>
     </div>
     <button id="alterarDescricaoBtn">Alterar Descrição</button>
 
+	<h2>Exemplo AJAX </h2>
+	<h3>Detalhes do Produto</h3>
+	<p id="produtoPreco" th:text="${produto.preco}">Preço do Produto</p>
+	<button id="atualizarPrecoBtn">Atualizar Preço</button>
+	
+
+	
     <script>
         // Manipulando o evento de clique
         document.getElementById('alterarDescricaoBtn').addEventListener('click', function() {
             // Alterando o conteúdo dinamicamente
             document.getElementById('produtoDescricao').innerText = 'Nova descrição do produto após clique!';
         });
+		
+		document.getElementById('atualizarPrecoBtn').addEventListener('click', function() {
+		            // Realizando uma requisição AJAX
+		            fetch('/atualizarPreco', {
+		                method: 'GET'
+		            })
+		            .then(response => response.json())
+		            .then(data => {
+		                // Atualizando o conteúdo dinamicamente com o novo preço
+		                document.getElementById('produtoPreco').innerText = 'Novo preço: ' + data.preco.toFixed(2);
+		            });
+		 });
     </script>
 </body>
 </html>
