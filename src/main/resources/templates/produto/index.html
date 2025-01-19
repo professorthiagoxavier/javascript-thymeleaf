@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manipulação de Eventos</title>
+</head>
+<body>
+    <div>
+        <h2 id="produtoNome" th:text="${produto.nome}">Nome do Produto</h2>
+        <p id="produtoDescricao" th:text="${produto.descricao}">Descrição do Produto</p>
+    </div>
+    <button id="alterarDescricaoBtn">Alterar Descrição</button>
+
+    <script>
+        // Manipulando o evento de clique
+        document.getElementById('alterarDescricaoBtn').addEventListener('click', function() {
+            // Alterando o conteúdo dinamicamente
+            document.getElementById('produtoDescricao').innerText = 'Nova descrição do produto após clique!';
+        });
+    </script>
+</body>
+</html>
