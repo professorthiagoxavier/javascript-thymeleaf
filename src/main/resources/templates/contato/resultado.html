@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resultado</title>
+</head>
+<body>
+
+<h2>Lista de Telefones Enviados:</h2>
+
+<ul>
+    <li th:each="telefone : ${telefones}" th:text="${telefone}"></li>
+</ul>
+
+</body>
+</html>

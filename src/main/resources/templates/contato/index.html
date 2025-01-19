@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Formulário de Contatos</title>
+    <script>
+        let contador = 1; // Para controlar o número de campos de telefone
+        
+        // Função para adicionar um novo campo de telefone
+        function adicionarCampoTelefone() {
+            const container = document.getElementById('telefonesContainer');
+            const novoCampo = document.createElement('div');
+            novoCampo.classList.add('campo-telefone');
+            novoCampo.innerHTML = `
+                <label for="telefone${contador}">Telefone ${contador}:</label>
+                <input type="tel" id="telefone${contador}" name="telefones" placeholder="Digite o telefone ${contador}" required>
+                <button type="button" onclick="removerCampoTelefone(this)">Remover</button>
+            `;
+            container.appendChild(novoCampo);
+            contador++;
+        }
+
+        // Função para remover um campo de telefone
+        function removerCampoTelefone(button) {
+            button.parentElement.remove();
+            contador--;
+        }
+    </script>
+</head>
+<body>
+
+<h2>Formulário de Contatos</h2>
+
+<form th:action="@{/enviarContatos}" method="post">
+    <div id="telefonesContainer">
+        <!-- Campo de telefone inicial -->
+        <div class="campo-telefone">
+            <label for="telefone0">Telefone 1:</label>
+            <input type="tel" id="telefone0" name="telefones" placeholder="Digite o telefone" required>
+        </div>
+    </div>
+
+    <!-- Botão para adicionar novos campos -->
+    <button type="button" onclick="adicionarCampoTelefone()">Adicionar Telefone</button>
+    
+    <br><br>
+    <button type="submit">Enviar Contatos</button>
+</form>
+
+</body>
+</html>
