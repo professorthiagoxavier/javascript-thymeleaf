@@ -1,18 +1,23 @@
 package com.javascript_thymeleaf.models;
-import javax.validation.constraints.NotEmpty;
 
-public class Produto {
-	 @NotEmpty(message = "O nome do produto é obrigatório!")
-	private String nome;
-    private String descricao;
+public  class Produto {
+    private Long id;
+    private String nome;
     private double preco;
 
-    // Construtores, getters e setters
-
-    public Produto(String nome, String descricao, double preco) {
+    public Produto(Long id, String nome, double preco) {
+        this.id = id;
         this.nome = nome;
-        this.descricao = descricao;
         this.preco = preco;
+    }
+
+    // Getters e setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -21,14 +26,6 @@ public class Produto {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public double getPreco() {

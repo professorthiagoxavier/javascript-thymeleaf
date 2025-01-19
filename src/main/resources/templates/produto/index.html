@@ -1,73 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Manipulação de Eventos</title>
+    <title>Lista de Produtos</title>
 </head>
 <body>
-	<h2>Exemplo Manipulaçao javacript</h2>
-    <div>
-        <h2 id="produtoNome" th:text="${produto.nome}">Nome do Produto</h2>
-        <p id="produtoDescricao" th:text="${produto.descricao}">Descrição do Produto</p>
+    <h2>Lista de Produtos</h2>
+    
+    <ul id="produtosLista">
+        <li th:each="produto : ${produtos}">
+            <span th:text="${produto.nome}">Produto</span> - 
+            <span th:text="${produto.preco}">Preço</span> 
+            <button th:attr="onclick='confirmarDelecao(' + ${produto.id} + ')'">Deletar</button>
+        </li>
+    </ul>
+
+    <div id="confirmacaoDelecao" style="display:none;">
+        <p>Você tem certeza que deseja excluir este produto?</p>
+        <button id="confirmarBtn">Confirmar</button>
+        <button id="cancelarBtn">Cancelar</button>
     </div>
-    <button id="alterarDescricaoBtn">Alterar Descrição</button>
 
-	<h2>Exemplo AJAX </h2>
-	<h3>Detalhes do Produto</h3>
-	<p id="produtoPreco" th:text="${produto.preco}">Preço do Produto</p>
-	<button id="atualizarPrecoBtn">Atualizar Preço</button>
-	
-	<h2> Validação <h2>
+    <script th:inline="javascript">
+        let produtoIdDeletar = null;
+		let produtos = /*[[${produtos}]]*/ []; // Lista de produtos
 		
-	<form id="produtoForm" th:action="@{/produto/salvar}" method="post">
-	        <label for="nome">Nome do Produto:</label>
-			<input type="text" id="nome" name="nome" th:value="${produto.nome}" required>
-	        <div th:if="${#fields.hasErrors('produto.nome')}" style="color: red;">
-	            <p th:errors="*{produto.nome}"></p>
-	        </div>
+        // Função chamada ao clicar no botão de deletar
+        function confirmarDelecao(id) {
+            produtoIdDeletar = id;
+            // Encontrar o produto pelo id na lista
+         
+            produto = produtos.find(p => p.id === produtoIdDeletar);
+            
+            if (produto) {
+                alert("Produto encontrado: " + produto.nome + " - " + produto.preco);
+                // Exibir o modal de confirmação
+                document.getElementById('confirmacaoDelecao').style.display = 'block';
+            }
+        }
 
-	        <button type="submit">Enviar</button>
-
-	        <p id="errorMensagem" style="color:red;"></p>
-	  </form>
-
-	
-    <script>
-        // Manipulando o evento de clique
-        document.getElementById('alterarDescricaoBtn').addEventListener('click', function() {
-            // Alterando o conteúdo dinamicamente
-            document.getElementById('produtoDescricao').innerText = 'Nova descrição do produto após clique!';
+        // Confirmar deleção
+        document.getElementById('confirmarBtn').addEventListener('click', function() {
+            // Remover o produto da lista (simulando a deleção)
+            alert('Produto deletado com sucesso!');
+            // Fechar o modal
+            document.getElementById('confirmacaoDelecao').style.display = 'none';
         });
-		
-		document.getElementById('atualizarPrecoBtn').addEventListener('click', function() {
-		            // Realizando uma requisição AJAX
-		            fetch('/atualizarPreco', {
-		                method: 'GET'
-		            })
-		            .then(response => response.json())
-		            .then(data => {
-		                // Atualizando o conteúdo dinamicamente com o novo preço
-		                document.getElementById('produtoPreco').innerText = 'Novo preço: ' + data.preco.toFixed(2);
-		            });
-		 });
-		 
-		 
-		 //Validação no front
-		 document.getElementById('produtoForm').addEventListener('submit', function(event) {
-		             // Previne o envio do formulário
-		             event.preventDefault();
 
-		             var nomeProduto = document.getElementById('nome').value;
-
-		             // Validação simples para verificar se o campo está vazio
-		             if (nomeProduto.length <= 3) {
-		                 document.getElementById('errorMensagem').innerText = 'O produto precisa de no mímino 3 caracteres!';
-		             } else {
-		                 // Caso o formulário seja válido, envie os dados
-						 alert('Enviado com sucesso!')
-		                 document.getElementById('errorMensagem').innerText = '';
-		                 this.submit(); // Envia o formulário
-		             }
-		   });
+        // Cancelar deleção
+        document.getElementById('cancelarBtn').addEventListener('click', function() {
+            // Fechar o modal sem realizar a deleção
+            document.getElementById('confirmacaoDelecao').style.display = 'none';
+        });
     </script>
 </body>
 </html>
