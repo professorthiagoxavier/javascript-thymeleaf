@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Consumindo API ViaCEP</title>
+    <style>
+        /* Estilos para o loading */
+        #loading {
+            display: none;
+            font-size: 20px;
+            color: #007bff;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Estilos para o spinner */
+        .spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+
+        /* Animação do spinner */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <h2>Consulta de Endereço</h2>
+
+    <label for="cep">Digite o CEP:</label>
+    <input type="text" id="cep" placeholder="CEP" maxlength="8">
+    <button onclick="consultarCEP()">Consultar</button>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Carregando dados... Por favor, aguarde.</p>
+    </div>
+
+    <h3>Detalhes do Endereço</h3>
+    <p id="endereco"></p>
+    <p id="erro" style="color: red;"></p>
+
+    <script>
+		function sleep(ms) {
+		           return new Promise(resolve => setTimeout(resolve, ms));
+		       }
+
+		       async function consultarCEP() {
+		           var cep = document.getElementById('cep').value;
+
+		           // Validando o CEP (apenas números, 8 caracteres)
+		           if (!/^\d{8}$/.test(cep)) {
+		               document.getElementById('erro').innerText = 'CEP inválido. Por favor, insira um CEP válido com 8 números.';
+		               document.getElementById('endereco').innerText = '';
+		               return;
+		           }
+
+		           // Exibir o loading enquanto a requisição está em andamento
+		           document.getElementById('loading').style.display = 'block';
+		           document.getElementById('erro').innerText = '';
+		           document.getElementById('endereco').innerText = '';
+
+		           // Introduzir um atraso de 5 segundos
+		           await sleep(2000);
+
+		           // Consumindo a API ViaCEP
+		           fetch(`https://viacep.com.br/ws/${cep}/json/`)
+		               .then(response => response.json())
+		               .then(data => {
+		                   // Escondendo o loading ao finalizar a requisição
+		                   document.getElementById('loading').style.display = 'none';
+
+		                   // Verificando se o CEP existe
+		                   if (data.erro) {
+		                       document.getElementById('erro').innerText = 'CEP não encontrado.';
+		                       document.getElementById('endereco').innerText = '';
+		                   } else {
+		                       // Exibindo os dados do endereço
+		                       document.getElementById('erro').innerText = '';
+		                       document.getElementById('endereco').innerHTML =
+		                           `Logradouro: ${data.logradouro} <br>
+		                            Bairro: ${data.bairro} <br>
+		                            Cidade: ${data.localidade} <br>
+		                            Estado: ${data.uf}`;
+		                   }
+		               })
+		               .catch(error => {
+		                   // Escondendo o loading em caso de erro
+		                   document.getElementById('loading').style.display = 'none';
+
+		                   console.error('Erro ao consultar a API ViaCEP:', error);
+		                   document.getElementById('erro').innerText = 'Erro ao consultar o endereço.';
+		                   document.getElementById('endereco').innerText = '';
+		               });
+		       }
+    </script>
+</body>
+</html>
