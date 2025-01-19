@@ -16,6 +16,19 @@
 	<p id="produtoPreco" th:text="${produto.preco}">Preço do Produto</p>
 	<button id="atualizarPrecoBtn">Atualizar Preço</button>
 	
+	<h2> Validação <h2>
+		
+	<form id="produtoForm" th:action="@{/produto/salvar}" method="post">
+	        <label for="nome">Nome do Produto:</label>
+			<input type="text" id="nome" name="nome" th:value="${produto.nome}" required>
+	        <div th:if="${#fields.hasErrors('produto.nome')}" style="color: red;">
+	            <p th:errors="*{produto.nome}"></p>
+	        </div>
+
+	        <button type="submit">Enviar</button>
+
+	        <p id="errorMensagem" style="color:red;"></p>
+	  </form>
 
 	
     <script>
@@ -36,6 +49,25 @@
 		                document.getElementById('produtoPreco').innerText = 'Novo preço: ' + data.preco.toFixed(2);
 		            });
 		 });
+		 
+		 
+		 //Validação no front
+		 document.getElementById('produtoForm').addEventListener('submit', function(event) {
+		             // Previne o envio do formulário
+		             event.preventDefault();
+
+		             var nomeProduto = document.getElementById('nome').value;
+
+		             // Validação simples para verificar se o campo está vazio
+		             if (nomeProduto.length <= 3) {
+		                 document.getElementById('errorMensagem').innerText = 'O produto precisa de no mímino 3 caracteres!';
+		             } else {
+		                 // Caso o formulário seja válido, envie os dados
+						 alert('Enviado com sucesso!')
+		                 document.getElementById('errorMensagem').innerText = '';
+		                 this.submit(); // Envia o formulário
+		             }
+		   });
     </script>
 </body>
 </html>

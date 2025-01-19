@@ -1,8 +1,13 @@
 package com.javascript_thymeleaf.controllers;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javascript_thymeleaf.models.Produto;
@@ -31,5 +36,22 @@ public class ProdutoController {
 
         // Retorna o produto com o novo preço no formato JSON
         return produto;
+    }
+    
+    @PostMapping("produto/salvar")
+    public String salvarProduto(@Valid @ModelAttribute Produto produto, BindingResult bindingResult, Model model) {
+    
+        System.out.println(produto.getNome());
+        
+        // Lógica para salvar o produto, pode ser um banco de dados ou outro processamento
+        
+        model.addAttribute("mensagemSucesso", "Produto salvo com sucesso!");
+        return "redirect:/produto-sucesso";// Pode redirecionar ou exibir uma mensagem de sucesso
+    }
+    
+    @GetMapping("/produto-sucesso")
+    public String exibirPaginaSucesso() {
+        // Retorna o template de sucesso
+        return "/produto/produto-sucesso"; // Nome do template Thymeleaf para a página de sucesso
     }
 }

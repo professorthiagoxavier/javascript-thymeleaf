@@ -1,7 +1,9 @@
 package com.javascript_thymeleaf.models;
+import javax.validation.constraints.NotEmpty;
 
 public class Produto {
-    private String nome;
+	 @NotEmpty(message = "O nome do produto é obrigatório!")
+	private String nome;
     private String descricao;
     private double preco;
 
